@@ -16,16 +16,20 @@
 
 using namespace tihmstar::offsetfinder64;
 
+#define FLAG_UNLOCK_NVRAM (1 << 0)
+
 int main(int argc, const char * argv[]) {
     FILE* fp = NULL;
     char* cmd_handler_str = NULL;
     char* custom_boot_args = NULL;
     uint64_t cmd_handler_ptr = 0;
+    int flags = 0;
     
     if(argc < 3) {
         printf("Usage: %s <iboot_in> <iboot_out> [args]\n", argv[0]);
         printf("\t-b <str>\tApply custom boot args.\n");
         printf("\t-c <cmd> <ptr>\tChange a command handler's pointer (hex).\n");
+        printf("\t-n \t\tApply unlock nvram patch.\n");
         return -1;
     }
     
@@ -34,7 +38,9 @@ int main(int argc, const char * argv[]) {
     for(int i = 0; i < argc; i++) {
         if(HAS_ARG("-b", 1)) {
             custom_boot_args = (char*) argv[i+1];
-        } else if(HAS_ARG("-c", 2)) {
+        } else if(HAS_ARG("-n", 0)) {
+            flags |= FLAG_UNLOCK_NVRAM;
+        }else if(HAS_ARG("-c", 2)) {
             cmd_handler_str = (char*) argv[i+1];
             sscanf((char*) argv[i+2], "0x%016llX", &cmd_handler_ptr);
         }
@@ -50,7 +56,7 @@ int main(int argc, const char * argv[]) {
             try {
                 auto p = ibp.get_boot_arg_patch(custom_boot_args);
                 patches.insert(patches.begin(), p.begin(), p.end());
-            } catch (...) {
+            } catch (tihmstar::exception &e) {
                 printf("%s: Error doing patch_boot_args()!\n", __FUNCTION__);
                 return -1;
             }
@@ -68,13 +74,25 @@ int main(int argc, const char * argv[]) {
     }
     
     /* Ensure that the loader has a shell. */
-    if(ibp.has_recovery_console() && cmd_handler_str && cmd_handler_ptr) {
-        try {
-            auto p = ibp.get_cmd_handler_patch(cmd_handler_str, cmd_handler_ptr);
-            patches.insert(patches.begin(), p.begin(), p.end());
-        } catch (...) {
-            printf("%s: Error doing patch_cmd_handler()!\n", __FUNCTION__);
-            return -1;
+    if(ibp.has_recovery_console()) {
+        if (cmd_handler_str && cmd_handler_ptr) {
+            try {
+                auto p = ibp.get_cmd_handler_patch(cmd_handler_str, cmd_handler_ptr);
+                patches.insert(patches.begin(), p.begin(), p.end());
+            } catch (...) {
+                printf("%s: Error doing patch_cmd_handler()!\n", __FUNCTION__);
+                return -1;
+            }
+        }
+        
+        if (flags & FLAG_UNLOCK_NVRAM) {
+            try {
+                auto p = ibp.get_unlock_nvram_patch();
+                patches.insert(patches.begin(), p.begin(), p.end());
+            } catch (...) {
+                printf("%s: Error doing get_unlock_nvram_patch()!\n", __FUNCTION__);
+                return -1;
+            }
         }
     }
     
