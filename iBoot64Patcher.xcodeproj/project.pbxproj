@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8701ADB123435A5700CE4535 /* liboffsetfinder64.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8701ADB023435A5700CE4535 /* liboffsetfinder64.0.dylib */; };
 		876C40F6233E62F000A60DC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 876C40F5233E62F000A60DC2 /* main.cpp */; };
+		87AB3F3023721DAE0019FB5F /* libgeneral.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87AB3F2F23721DAD0019FB5F /* libgeneral.0.dylib */; };
+		87AB3F3123721DAE0019FB5F /* libgeneral.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 87AB3F2F23721DAD0019FB5F /* libgeneral.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -21,12 +23,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		87AB3F3223721DAE0019FB5F /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				87AB3F3123721DAE0019FB5F /* libgeneral.0.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		8701ADB023435A5700CE4535 /* liboffsetfinder64.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liboffsetfinder64.0.dylib; path = ../../../../usr/local/lib/liboffsetfinder64.0.dylib; sourceTree = "<group>"; };
 		876C40F2233E62F000A60DC2 /* iBoot64Patcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = iBoot64Patcher; sourceTree = BUILT_PRODUCTS_DIR; };
 		876C40F5233E62F000A60DC2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		87AB3F2F23721DAD0019FB5F /* libgeneral.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgeneral.0.dylib; path = ../../../../usr/local/lib/libgeneral.0.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8701ADB123435A5700CE4535 /* liboffsetfinder64.0.dylib in Frameworks */,
+				87AB3F3023721DAE0019FB5F /* libgeneral.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +59,7 @@
 		8701ADAF23435A5600CE4535 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				87AB3F2F23721DAD0019FB5F /* libgeneral.0.dylib */,
 				8701ADB023435A5700CE4535 /* liboffsetfinder64.0.dylib */,
 			);
 			name = Frameworks;
@@ -84,6 +100,7 @@
 				876C40EE233E62F000A60DC2 /* Sources */,
 				876C40EF233E62F000A60DC2 /* Frameworks */,
 				876C40F0233E62F000A60DC2 /* CopyFiles */,
+				87AB3F3223721DAE0019FB5F /* Embed Libraries */,
 			);
 			buildRules = (
 			);
