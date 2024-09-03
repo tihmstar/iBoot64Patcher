@@ -104,12 +104,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Download ubuntu artifact
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v4.1.7
       with:
         name: buildroot_ubuntu-latest   
         path: buildroot_ubuntu-latest    
     - name: Download macos artifact
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v4.1.7
       with:
         name: buildroot_macos-latest
         path: buildroot_macos-latest
