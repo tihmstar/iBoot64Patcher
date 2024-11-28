@@ -10,11 +10,13 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <liboffsetfinder64/ibootpatchfinder64.hpp>
+#include <libpatchfinder/ibootpatchfinder/ibootpatchfinder64.hpp>
+
+typedef uint64_t offset_t;
 
 #define HAS_ARG(x,y) (!strcmp(argv[i], x) && (i + y) < argc)
 
-using namespace tihmstar::offsetfinder64;
+using namespace tihmstar::patchfinder;
 
 #define FLAG_UNLOCK_NVRAM (1 << 0)
 
@@ -49,6 +51,10 @@ int main(int argc, const char * argv[]) {
     std::vector<patch> patches;
     
     ibootpatchfinder64 *ibp = ibootpatchfinder64::make_ibootpatchfinder64(argv[1]);
+
+    if(ibp->find_base()){
+        printf("got image base: %p\n", ibp->find_base());
+    }
     
     /* Check to see if the loader has a kernel load routine before trying to apply custom boot args + debug-enabled override. */
     if(ibp->has_kernel_load()) {
@@ -109,8 +115,16 @@ int main(int argc, const char * argv[]) {
         printf("%s: Error doing patch_rsa_check()!\n", __FUNCTION__);
         return -1;
     }
-    
-    
+
+    try {
+        printf("getting get_atv4k_enable_uart_patch() patch\n");
+        auto p = ibp->get_atv4k_enable_uart_patch();
+        patches.insert(patches.begin(), p.begin(), p.end());
+    } catch (...) {
+        printf("%s: Error doing get_atv4k_enable_uart_patch()!\n", __FUNCTION__);
+        return -1;
+    }
+
     /* Write out the patched file... */
     fp = fopen(argv[2], "wb+");
     if(!fp) {
